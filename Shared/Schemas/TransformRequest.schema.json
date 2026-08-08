@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opentype.local/schemas/transform-request.schema.json",
+  "title": "OpenType Transform Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "requestId",
+    "mode",
+    "transcript",
+    "context",
+    "preferences",
+    "memory"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "requestId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "mode": {
+      "enum": [
+        "smartEdit",
+        "english",
+        "agent",
+        "xReply",
+        "transcribe"
+      ]
+    },
+    "transcript": {
+      "type": "string"
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selectedText",
+        "applicationName",
+        "applicationId"
+      ],
+      "properties": {
+        "selectedText": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "applicationName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "applicationId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "preferences": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "personalVocabulary",
+        "xReplyStyle",
+        "promptOverride"
+      ],
+      "properties": {
+        "personalVocabulary": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "xReplyStyle": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "adaptive",
+            "concise",
+            "friendly",
+            "sharp",
+            null
+          ]
+        },
+        "promptOverride": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "memory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recentTasks",
+        "profile"
+      ],
+      "properties": {
+        "recentTasks": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "maxItems": 12
+        },
+        "profile": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

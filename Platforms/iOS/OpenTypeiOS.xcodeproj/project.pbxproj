@@ -1,0 +1,261 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E00000000000000000000001 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000001 /* AppModel.swift */; };
+		E00000000000000000000002 /* CloudTextService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000002 /* CloudTextService.swift */; };
+		E00000000000000000000003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000003 /* ContentView.swift */; };
+		E00000000000000000000004 /* HistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000004 /* HistoryStore.swift */; };
+		E00000000000000000000005 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000005 /* HistoryView.swift */; };
+		E00000000000000000000006 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000006 /* KeychainStore.swift */; };
+		E00000000000000000000007 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000007 /* L10n.swift */; };
+		E00000000000000000000008 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000008 /* Models.swift */; };
+		E00000000000000000000009 /* OpenTypeiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000009 /* OpenTypeiOSApp.swift */; };
+		E00000000000000000000010 /* PromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000010 /* PromptBuilder.swift */; };
+		E00000000000000000000011 /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000011 /* SettingsStore.swift */; };
+		E00000000000000000000012 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000012 /* SettingsView.swift */; };
+		E00000000000000000000013 /* SharedResultStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000013 /* SharedResultStore.swift */; };
+		E00000000000000000000014 /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000014 /* SpeechRecognizer.swift */; };
+		E00000000000000000000020 /* OpenTypeKeyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = B10000000000000000000002 /* OpenTypeKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E00000000000000000000021 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000021 /* KeyboardViewController.swift */; };
+		E00000000000000000000031 /* OpenTypeiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000031 /* OpenTypeiOSTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		I00000000000000000000001 = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A00000000000000000000000 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A10000000000000000000002;
+			remoteInfo = OpenTypeKeyboard;
+		};
+		I00000000000000000000003 = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A00000000000000000000000 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A10000000000000000000001;
+			remoteInfo = OpenTypeiOS;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		F00000000000000000000004 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E00000000000000000000020 /* OpenTypeKeyboard.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		B10000000000000000000001 /* OpenType.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenType.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B10000000000000000000002 /* OpenTypeKeyboard.appex */ = {isa = PBXFileReference; explicitFileType = wrapper.app-extension; includeInIndex = 0; path = OpenTypeKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		B10000000000000000000003 /* OpenTypeiOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OpenTypeiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D00000000000000000000001 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		D00000000000000000000002 /* CloudTextService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudTextService.swift; sourceTree = "<group>"; };
+		D00000000000000000000003 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D00000000000000000000004 /* HistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryStore.swift; sourceTree = "<group>"; };
+		D00000000000000000000005 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		D00000000000000000000006 /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
+		D00000000000000000000007 /* L10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
+		D00000000000000000000008 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		D00000000000000000000009 /* OpenTypeiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenTypeiOSApp.swift; sourceTree = "<group>"; };
+		D00000000000000000000010 /* PromptBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptBuilder.swift; sourceTree = "<group>"; };
+		D00000000000000000000011 /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
+		D00000000000000000000012 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		D00000000000000000000013 /* SharedResultStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedResultStore.swift; sourceTree = "<group>"; };
+		D00000000000000000000014 /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
+		D00000000000000000000015 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D00000000000000000000016 /* OpenTypeiOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OpenTypeiOS.entitlements; sourceTree = "<group>"; };
+		D00000000000000000000021 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
+		D00000000000000000000022 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D00000000000000000000023 /* OpenTypeKeyboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OpenTypeKeyboard.entitlements; sourceTree = "<group>"; };
+		D00000000000000000000031 /* OpenTypeiOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenTypeiOSTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F00000000000000000000002 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		F00000000000000000000012 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		F00000000000000000000022 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C00000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				C00000000000000000000003 /* OpenTypeiOS */,
+				C00000000000000000000004 /* OpenTypeKeyboard */,
+				C00000000000000000000005 /* OpenTypeiOSTests */,
+				C00000000000000000000002 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C00000000000000000000002 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B10000000000000000000001 /* OpenType.app */,
+				B10000000000000000000002 /* OpenTypeKeyboard.appex */,
+				B10000000000000000000003 /* OpenTypeiOSTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000003 /* OpenTypeiOS */ = {
+			isa = PBXGroup;
+			children = (
+				D00000000000000000000001 /* AppModel.swift */,
+				D00000000000000000000002 /* CloudTextService.swift */,
+				D00000000000000000000003 /* ContentView.swift */,
+				D00000000000000000000004 /* HistoryStore.swift */,
+				D00000000000000000000005 /* HistoryView.swift */,
+				D00000000000000000000006 /* KeychainStore.swift */,
+				D00000000000000000000007 /* L10n.swift */,
+				D00000000000000000000008 /* Models.swift */,
+				D00000000000000000000009 /* OpenTypeiOSApp.swift */,
+				D00000000000000000000010 /* PromptBuilder.swift */,
+				D00000000000000000000011 /* SettingsStore.swift */,
+				D00000000000000000000012 /* SettingsView.swift */,
+				D00000000000000000000013 /* SharedResultStore.swift */,
+				D00000000000000000000014 /* SpeechRecognizer.swift */,
+				D00000000000000000000015 /* Info.plist */,
+				D00000000000000000000016 /* OpenTypeiOS.entitlements */,
+			);
+			path = OpenTypeiOS;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000004 /* OpenTypeKeyboard */ = {
+			isa = PBXGroup;
+			children = (
+				D00000000000000000000021 /* KeyboardViewController.swift */,
+				D00000000000000000000022 /* Info.plist */,
+				D00000000000000000000023 /* OpenTypeKeyboard.entitlements */,
+			);
+			path = OpenTypeKeyboard;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000005 /* OpenTypeiOSTests */ = {
+			isa = PBXGroup;
+			children = (D00000000000000000000031 /* OpenTypeiOSTests.swift */, );
+			path = OpenTypeiOSTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A10000000000000000000001 /* OpenTypeiOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = G00000000000000000000002;
+			buildPhases = (F00000000000000000000001, F00000000000000000000002, F00000000000000000000003, F00000000000000000000004, );
+			buildRules = ();
+			dependencies = (I00000000000000000000002, );
+			name = OpenTypeiOS;
+			productName = OpenType;
+			productReference = B10000000000000000000001;
+			productType = "com.apple.product-type.application";
+		};
+		A10000000000000000000002 /* OpenTypeKeyboard */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = G00000000000000000000003;
+			buildPhases = (F00000000000000000000011, F00000000000000000000012, F00000000000000000000013, );
+			buildRules = ();
+			dependencies = ();
+			name = OpenTypeKeyboard;
+			productName = OpenTypeKeyboard;
+			productReference = B10000000000000000000002;
+			productType = "com.apple.product-type.app-extension";
+		};
+		A10000000000000000000003 /* OpenTypeiOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = G00000000000000000000004;
+			buildPhases = (F00000000000000000000021, F00000000000000000000022, F00000000000000000000023, );
+			buildRules = ();
+			dependencies = (I00000000000000000000004, );
+			name = OpenTypeiOSTests;
+			productName = OpenTypeiOSTests;
+			productReference = B10000000000000000000003;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A00000000000000000000000 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2660;
+				LastUpgradeCheck = 2660;
+				TargetAttributes = {
+					A10000000000000000000001 = {CreatedOnToolsVersion = 26.0; };
+					A10000000000000000000002 = {CreatedOnToolsVersion = 26.0; };
+					A10000000000000000000003 = {CreatedOnToolsVersion = 26.0; TestTargetID = A10000000000000000000001; };
+				};
+			};
+			buildConfigurationList = G00000000000000000000001;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (en, Base, "zh-Hans", );
+			mainGroup = C00000000000000000000001;
+			productRefGroup = C00000000000000000000002;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (A10000000000000000000001, A10000000000000000000002, A10000000000000000000003, );
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F00000000000000000000003 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		F00000000000000000000013 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		F00000000000000000000023 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F00000000000000000000001 = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E00000000000000000000001, E00000000000000000000002, E00000000000000000000003,
+				E00000000000000000000004, E00000000000000000000005, E00000000000000000000006,
+				E00000000000000000000007, E00000000000000000000008, E00000000000000000000009,
+				E00000000000000000000010, E00000000000000000000011, E00000000000000000000012,
+				E00000000000000000000013, E00000000000000000000014,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F00000000000000000000011 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (E00000000000000000000021, ); runOnlyForDeploymentPostprocessing = 0; };
+		F00000000000000000000021 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (E00000000000000000000031, ); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		I00000000000000000000002 = {isa = PBXTargetDependency; target = A10000000000000000000002; targetProxy = I00000000000000000000001; };
+		I00000000000000000000004 = {isa = PBXTargetDependency; target = A10000000000000000000001; targetProxy = I00000000000000000000003; };
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		H00000000000000000000001 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; DEBUG_INFORMATION_FORMAT = dwarf; ENABLE_TESTABILITY = YES; GCC_C_LANGUAGE_STANDARD = gnu17; GCC_OPTIMIZATION_LEVEL = 0; IPHONEOS_DEPLOYMENT_TARGET = 17.0; ONLY_ACTIVE_ARCH = YES; SDKROOT = iphoneos; SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; }; name = Debug; };
+		H00000000000000000000002 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym"; ENABLE_NS_ASSERTIONS = NO; GCC_C_LANGUAGE_STANDARD = gnu17; IPHONEOS_DEPLOYMENT_TARGET = 17.0; SDKROOT = iphoneos; SWIFT_COMPILATION_MODE = wholemodule; SWIFT_OPTIMIZATION_LEVEL = "-O"; VALIDATE_PRODUCT = YES; }; name = Release; };
+		H00000000000000000000011 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {CODE_SIGN_ENTITLEMENTS = OpenTypeiOS/OpenTypeiOS.entitlements; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = OpenTypeiOS/Info.plist; LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", ); MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = ai.opentype.ios; PRODUCT_MODULE_NAME = OpenTypeiOS; PRODUCT_NAME = OpenType; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SUPPORTS_MACCATALYST = NO; SWIFT_EMIT_LOC_STRINGS = YES; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Debug; };
+		H00000000000000000000012 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {CODE_SIGN_ENTITLEMENTS = OpenTypeiOS/OpenTypeiOS.entitlements; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = OpenTypeiOS/Info.plist; LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", ); MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = ai.opentype.ios; PRODUCT_MODULE_NAME = OpenTypeiOS; PRODUCT_NAME = OpenType; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SUPPORTS_MACCATALYST = NO; SWIFT_EMIT_LOC_STRINGS = YES; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Release; };
+		H00000000000000000000021 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_ENTITLEMENTS = OpenTypeKeyboard/OpenTypeKeyboard.entitlements; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = OpenTypeKeyboard/Info.plist; LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/../../Frameworks", ); MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = ai.opentype.ios.keyboard; PRODUCT_NAME = "$(TARGET_NAME)"; SKIP_INSTALL = YES; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Debug; };
+		H00000000000000000000022 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_ENTITLEMENTS = OpenTypeKeyboard/OpenTypeKeyboard.entitlements; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = OpenTypeKeyboard/Info.plist; LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/../../Frameworks", ); MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = ai.opentype.ios.keyboard; PRODUCT_NAME = "$(TARGET_NAME)"; SKIP_INSTALL = YES; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Release; };
+		H00000000000000000000031 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {BUNDLE_LOADER = "$(TEST_HOST)"; CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = YES; PRODUCT_BUNDLE_IDENTIFIER = ai.opentype.ios.tests; PRODUCT_NAME = "$(TARGET_NAME)"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OpenType.app/OpenType"; }; name = Debug; };
+		H00000000000000000000032 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {BUNDLE_LOADER = "$(TEST_HOST)"; CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = YES; PRODUCT_BUNDLE_IDENTIFIER = ai.opentype.ios.tests; PRODUCT_NAME = "$(TARGET_NAME)"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OpenType.app/OpenType"; }; name = Release; };
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		G00000000000000000000001 = {isa = XCConfigurationList; buildConfigurations = (H00000000000000000000001, H00000000000000000000002, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		G00000000000000000000002 = {isa = XCConfigurationList; buildConfigurations = (H00000000000000000000011, H00000000000000000000012, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		G00000000000000000000003 = {isa = XCConfigurationList; buildConfigurations = (H00000000000000000000021, H00000000000000000000022, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		G00000000000000000000004 = {isa = XCConfigurationList; buildConfigurations = (H00000000000000000000031, H00000000000000000000032, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+/* End XCConfigurationList section */
+	};
+	rootObject = A00000000000000000000000 /* Project object */;
+}

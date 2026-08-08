@@ -1,0 +1,17 @@
+.build/
+dist/
+.DS_Store
+*.xcuserstate
+.swiftpm/
+**/.DS_Store
+**/xcuserdata/
+DerivedData/
+
+Platforms/Android/.gradle/
+Platforms/Android/.kotlin/
+Platforms/Android/**/build/
+Platforms/Android/local.properties
+
+*.jks
+*.keystore
+*.mobileprovision

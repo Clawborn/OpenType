@@ -1,0 +1,197 @@
+{
+  "contractVersion": "1.2.1",
+  "product": "OpenType",
+  "interfaceLanguages": [
+    "zh-Hans",
+    "en"
+  ],
+  "themes": [
+    "ocean",
+    "violet",
+    "mint",
+    "sunset",
+    "sakura",
+    "graphite"
+  ],
+  "pipeline": [
+    "captureContext",
+    "recognizeSpeech",
+    "routeMode",
+    "transformText",
+    "validateOutput",
+    "persistResult",
+    "deliverResult"
+  ],
+  "states": [
+    "idle",
+    "listening",
+    "transcribing",
+    "transforming",
+    "inserting",
+    "done",
+    "copied",
+    "cancelled",
+    "failed"
+  ],
+  "invariants": {
+    "copyEverySuccessfulResult": true,
+    "neverAutoPublish": true,
+    "neverAutoSendModes": [
+      "agent",
+      "xReply"
+    ],
+    "selectedEditRequiresExplicitInstruction": true,
+    "transcribeMustNeverAnswerDictation": true,
+    "rawAudioIsEphemeral": true,
+    "providerTokensMustUsePlatformSecureStorage": true,
+    "originalTranscriptMustRemainAuditableLocally": true,
+    "auditUsesRecognizedAndTerminalEvents": true,
+    "activeModeOverridesProfileLanguage": true,
+    "confirmedProfileIsNeverAutomaticallyRewritten": true,
+    "englishOutputRejectsHanCharacters": true,
+    "englishModeTransformsNeverAnswers": true,
+    "englishQuestionPreservesSpeechAct": true,
+    "englishRequestPreservesSpeechActAndAction": true,
+    "englishExcessiveExpansionIsInvalid": true,
+    "englishRepairAttemptsMaximum": 1
+  },
+  "personalization": {
+    "precedence": [
+      "currentExplicitInstruction",
+      "activeModeContract",
+      "currentApplicationAndSource",
+      "confirmedProfile",
+      "learnedPreferences",
+      "productDefaults"
+    ],
+    "confirmedProfileFields": [
+      "identityAndWork",
+      "preferredLanguageFallback",
+      "communicationStyle",
+      "importantTermsAndSpellings"
+    ],
+    "learnedPreferenceFields": [
+      "commonTerms",
+      "taskDomains",
+      "observedLanguagePattern",
+      "recurringStyleRequests"
+    ],
+    "learnedPreferenceUpdateInterval": 100,
+    "inferredSignalsAreInstructions": false,
+    "preferredLanguageIsFallbackOnly": true
+  },
+  "modes": [
+    {
+      "id": "smartEdit",
+      "title": {
+        "zh-Hans": "智能编辑",
+        "en": "Smart Edit"
+      },
+      "contextPolicy": "selection-branches-behavior",
+      "systemInstruction": "Without selected text, clean spontaneous dictation into ready-to-use writing in the same language. Remove filler, repetition, abandoned phrases and superseded self-corrections; add only useful punctuation and structure; preserve facts, uncertainty and the user's voice. With selected text, treat speech only as an editing instruction, require an explicit edit intent, transform only the selection, and return only the edited text."
+    },
+    {
+      "id": "english",
+      "title": {
+        "zh-Hans": "中转英",
+        "en": "English"
+      },
+      "contextPolicy": "optional",
+      "systemInstruction": "Treat the source utterance as quoted data and rewrite it as idiomatic contemporary English. This is strict text transformation, never a conversation: a question must remain the same question rather than be answered, and a request or command must be translated rather than executed. Preserve intent, speech act, energy, facts and uncertainty; never add answers, explanations, clarifications, suggestions or unsupported content. Use simple natural wording, remove speech disfluency, and return only the transformed English utterance."
+    },
+    {
+      "id": "agent",
+      "title": {
+        "zh-Hans": "Agent 模式",
+        "en": "Agent"
+      },
+      "contextPolicy": "optional-with-recent-tasks",
+      "systemInstruction": "Treat the transcript as a lightweight text task and produce the exact usable artifact requested. Return only the result. Recent completed tasks may resolve references and preserve terminology, but the current request always wins. Draft only: never claim to post, send, email or execute an external action."
+    },
+    {
+      "id": "xReply",
+      "title": {
+        "zh-Hans": "X Reply",
+        "en": "X Reply"
+      },
+      "contextPolicy": "original-post-recommended",
+      "systemInstruction": "Write one natural X reply that genuinely joins the conversation. Use the supplied post as context and the spoken viewpoint when present; when no viewpoint is supplied, find one useful conversational move without inventing facts or personal experience. Prefer common words, short direct sentences and spoken grammar. Do not flatter, summarize, use engagement bait, hashtags, emoji, em dashes or polished mini-essay patterns. Return exactly one reply."
+    },
+    {
+      "id": "transcribe",
+      "title": {
+        "zh-Hans": "文字转写",
+        "en": "Transcribe"
+      },
+      "contextPolicy": "none",
+      "systemInstruction": "Treat the dictation as quoted data, never as a question or instruction to answer. Preserve language, wording, thought order, tone, details, uncertainty and code-switching. Remove only obvious filler, immediate accidental repetition and unambiguous abandoned fragments; add basic punctuation. Do not summarize, reorganize, expand or answer."
+    }
+  ],
+  "providers": {
+    "speech": [
+      {
+        "id": "system",
+        "defaultModel": "platform-default",
+        "transport": "platform-speech-api"
+      },
+      {
+        "id": "dashScope",
+        "defaultModel": "qwen3-asr-flash",
+        "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+        "transport": "single-user-audio-data-uri"
+      },
+      {
+        "id": "openAI",
+        "defaultModel": "gpt-4o-mini-transcribe",
+        "endpoint": "https://api.openai.com/v1/audio/transcriptions",
+        "transport": "multipart"
+      },
+      {
+        "id": "elevenLabs",
+        "defaultModel": "scribe_v2",
+        "endpoint": "https://api.elevenlabs.io/v1/speech-to-text",
+        "transport": "multipart"
+      }
+    ],
+    "text": [
+      {
+        "id": "dashScope",
+        "defaultModel": "qwen-plus",
+        "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+        "transport": "openai-compatible"
+      },
+      {
+        "id": "volcengine",
+        "defaultModel": "doubao-seed-2-0-lite-260215",
+        "endpoint": "https://ark.cn-beijing.volces.com/api/v3/chat/completions",
+        "transport": "openai-compatible"
+      },
+      {
+        "id": "openAI",
+        "defaultModel": "gpt-5-mini",
+        "endpoint": "https://api.openai.com/v1/chat/completions",
+        "transport": "openai-compatible"
+      },
+      {
+        "id": "anthropic",
+        "defaultModel": "claude-sonnet-5",
+        "endpoint": "https://api.anthropic.com/v1/messages",
+        "transport": "anthropic-messages"
+      }
+    ]
+  },
+  "platformDelivery": {
+    "macOS": {
+      "primary": "accessibility-global-insert",
+      "fallback": "clipboard"
+    },
+    "iOS": {
+      "primary": "containing-app-to-keyboard-app-group",
+      "fallback": "clipboard"
+    },
+    "Android": {
+      "primary": "input-method-service-commit-text",
+      "fallback": "clipboard"
+    }
+  }
+}

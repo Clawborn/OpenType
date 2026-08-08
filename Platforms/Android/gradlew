@@ -1,0 +1,30 @@
+#!/usr/bin/env sh
+# Lightweight text-only bootstrap used because this source drop intentionally
+# does not commit a binary gradle-wrapper.jar. It downloads the pinned Gradle
+# distribution into GRADLE_USER_HOME, verifies the archive with unzip, and then
+# runs Gradle. Use `zsh ./gradlew ...` if the executable bit was not preserved.
+set -eu
+
+APP_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+GRADLE_VERSION=8.9
+GRADLE_SHA256=d725d707bfabd4dfdc958c624003b3c80accc03f7037b5122c4b1d0ef15cecab
+GRADLE_HOME_DIR=${GRADLE_USER_HOME:-"$HOME/.gradle"}
+DIST_DIR="$GRADLE_HOME_DIR/opentype-wrapper/gradle-$GRADLE_VERSION"
+ARCHIVE="$GRADLE_HOME_DIR/opentype-wrapper/gradle-$GRADLE_VERSION-bin.zip"
+
+if [ ! -x "$DIST_DIR/bin/gradle" ]; then
+    mkdir -p "$GRADLE_HOME_DIR/opentype-wrapper"
+    if [ ! -f "$ARCHIVE" ]; then
+        curl --fail --location --output "$ARCHIVE" \
+            "https://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip"
+    fi
+    ARCHIVE_SHA256=$(shasum -a 256 "$ARCHIVE" | awk '{print $1}')
+    if [ "$ARCHIVE_SHA256" != "$GRADLE_SHA256" ]; then
+        echo "Gradle archive checksum mismatch: $ARCHIVE" >&2
+        exit 1
+    fi
+    unzip -t "$ARCHIVE" >/dev/null
+    unzip -q -o "$ARCHIVE" -d "$GRADLE_HOME_DIR/opentype-wrapper"
+fi
+
+exec "$DIST_DIR/bin/gradle" -p "$APP_DIR" "$@"

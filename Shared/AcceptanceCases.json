@@ -1,0 +1,196 @@
+{
+  "version": "1.2.1",
+  "cases": [
+    {
+      "id": "transcribe-short-question",
+      "mode": "transcribe",
+      "transcript": "为啥微信不行",
+      "selectedText": null,
+      "expected": {
+        "result": "为啥微信不行？",
+        "mustNotContain": [
+          "主要是因为",
+          "无法",
+          "建议"
+        ],
+        "modelCall": false
+      }
+    },
+    {
+      "id": "transcribe-never-answers",
+      "mode": "transcribe",
+      "transcript": "嗯，我想问一下，为什么这个版本在微信里面不行，然后帮我把这句话记下来",
+      "selectedText": null,
+      "expected": {
+        "preserveIntent": true,
+        "mustNotAnswer": true,
+        "maximumGrowthRatio": 1.34
+      }
+    },
+    {
+      "id": "smart-edit-requires-command",
+      "mode": "smartEdit",
+      "transcript": "我还想补充一点",
+      "selectedText": "这是已经写好的原文。",
+      "expected": {
+        "state": "cancelled",
+        "modelCall": false,
+        "selectionUnchanged": true
+      }
+    },
+    {
+      "id": "smart-edit-selection",
+      "mode": "smartEdit",
+      "transcript": "改得更口语一点，但不要改变意思",
+      "selectedText": "该功能当前尚无法在目标应用程序中正常运作。",
+      "expected": {
+        "state": "done",
+        "usesSelectedTextAsSource": true,
+        "returnsOnlyEditedText": true
+      }
+    },
+    {
+      "id": "english-intent-not-literal",
+      "mode": "english",
+      "transcript": "我觉得方向是对的，但我们可能低估了真正部署到团队里的成本",
+      "selectedText": null,
+      "expected": {
+        "outputLanguage": "en",
+        "preserveClaimBoundary": true,
+        "simpleNaturalEnglish": true
+      }
+    },
+    {
+      "id": "english-profile-language-conflict",
+      "mode": "english",
+      "transcript": "中国的开源大模型在为人类做贡献",
+      "profile": {
+        "preferredLanguageFallback": "zh-Hans",
+        "observedLanguagePattern": "mainly-zh-with-english-terms"
+      },
+      "expected": {
+        "outputLanguage": "en",
+        "containsHanCharacters": false,
+        "maximumRepairAttempts": 1,
+        "invalidCandidateDelivered": false
+      }
+    },
+    {
+      "id": "english-question-never-answers",
+      "mode": "english",
+      "transcript": "什么是 OpenCloud？",
+      "selectedText": null,
+      "expected": {
+        "result": "What is OpenCloud?",
+        "preserveSpeechAct": "question",
+        "mustNotAnswer": true,
+        "mustNotAddFacts": true,
+        "maximumRepairAttempts": 1,
+        "invalidCandidateDelivered": false
+      }
+    },
+    {
+      "id": "english-request-never-executes",
+      "mode": "english",
+      "transcript": "帮我写一封邮件，告诉 Henry 明天不开会",
+      "selectedText": null,
+      "expected": {
+        "result": "Help me write an email telling Henry that tomorrow's meeting has been canceled.",
+        "preserveSpeechAct": "request",
+        "preserveRequestedAction": "write an email",
+        "mustNotReturnCompletedArtifact": true,
+        "maximumRepairAttempts": 1,
+        "invalidCandidateDelivered": false
+      }
+    },
+    {
+      "id": "smart-edit-question-never-answers",
+      "platform": "macOS",
+      "mode": "smartEdit",
+      "transcript": "这些人都领薪水吗？",
+      "selectedText": null,
+      "expected": {
+        "preserveSpeechAct": "question",
+        "mustNotAnswer": true,
+        "maximumRepairAttempts": 1,
+        "invalidCandidateDelivered": false
+      }
+    },
+    {
+      "id": "agent-drafts-only",
+      "mode": "agent",
+      "transcript": "帮我发一条 Twitter，表达我今天心情很好",
+      "selectedText": null,
+      "expected": {
+        "returnsOnlyArtifact": true,
+        "mustNotClaimPublished": true,
+        "automaticSend": false
+      }
+    },
+    {
+      "id": "x-reply-joins-conversation",
+      "mode": "xReply",
+      "transcript": "我觉得真正困难的是团队愿不愿意改变工作方式",
+      "selectedText": "AI adoption is mostly a tooling problem.",
+      "expected": {
+        "outputLanguage": "en",
+        "oneReplyOnly": true,
+        "simpleSpokenWording": true,
+        "automaticSend": false
+      }
+    },
+    {
+      "id": "clipboard-guarantee",
+      "mode": "all",
+      "expected": {
+        "successfulResultCopied": true,
+        "copySurvivesInsertFailure": true
+      }
+    },
+    {
+      "id": "dashscope-asr-contract",
+      "mode": "all",
+      "expected": {
+        "messageCount": 1,
+        "messageRole": "user",
+        "messageContainsOnlyAudio": true
+      }
+    },
+    {
+      "id": "password-field-hard-boundary",
+      "platform": "Android",
+      "mode": "all",
+      "expected": {
+        "voiceCaptureAvailable": false,
+        "contextRead": false,
+        "clipboardRead": false,
+        "cloudCall": false,
+        "auditWrite": false
+      }
+    },
+    {
+      "id": "stale-input-session-never-inserts",
+      "platform": "Android",
+      "mode": "all",
+      "expected": {
+        "cancelOnInputTargetChange": true,
+        "validateSessionBeforeInsert": true,
+        "oldResultInsertedIntoNewTarget": false
+      }
+    },
+    {
+      "id": "audit-lifecycle",
+      "mode": "all",
+      "expected": {
+        "recognizedEventAppended": true,
+        "terminalEventAppended": true,
+        "terminalStates": [
+          "completed",
+          "cancelled",
+          "failed"
+        ],
+        "ordinaryResetRewritesAudit": false
+      }
+    }
+  ]
+}

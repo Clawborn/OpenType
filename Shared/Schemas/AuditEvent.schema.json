@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opentype.local/schemas/audit-event.schema.json",
+  "title": "OpenType Append-Only Audit Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "eventId",
+    "requestId",
+    "createdAt",
+    "platform",
+    "status",
+    "mode",
+    "rawTranscript"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "eventId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "requestId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "platform": {
+      "enum": [
+        "macOS",
+        "iOS",
+        "Android"
+      ]
+    },
+    "status": {
+      "enum": [
+        "recognized",
+        "completed",
+        "cancelled",
+        "failed"
+      ]
+    },
+    "mode": {
+      "enum": [
+        "smartEdit",
+        "selectedEdit",
+        "english",
+        "agent",
+        "xReply",
+        "transcribe"
+      ]
+    },
+    "rawTranscript": {
+      "type": "string"
+    },
+    "effectiveInput": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "selectedContext": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "result": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "provider": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "model": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "error": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "supersedesEventId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid"
+    }
+  }
+}
