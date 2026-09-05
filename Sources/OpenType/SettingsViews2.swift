@@ -35,6 +35,29 @@ import SwiftUI
 /// column when it is the 334pt list beside a pushed sub-page. Neither layout
 /// changes a row's own metrics; only the page padding moves, exactly as the
 /// handoff specifies for every other screen.
+private enum SettingsCategory: String, CaseIterable, Identifiable {
+    case general, voice, intelligence, privacy, about
+    var id: String { rawValue }
+    var title: String {
+        switch self {
+        case .general: return OpenTypeL10n.text("通用", english: "General")
+        case .voice: return OpenTypeL10n.text("语音输入", english: "Voice input")
+        case .intelligence: return OpenTypeL10n.text("智能服务", english: "Intelligence")
+        case .privacy: return OpenTypeL10n.text("隐私与数据", english: "Privacy & data")
+        case .about: return OpenTypeL10n.text("关于", english: "About")
+        }
+    }
+    var symbol: String {
+        switch self {
+        case .general: return "gearshape"
+        case .voice: return "mic"
+        case .intelligence: return "sparkle"
+        case .privacy: return "hand.raised"
+        case .about: return "info.circle"
+        }
+    }
+}
+
 struct SettingsColumn: View {
     @ObservedObject var model: AppModel
     @ObservedObject var configuration: AppConfiguration
@@ -47,6 +70,7 @@ struct SettingsColumn: View {
     /// until the first read finishes — the row prints nothing rather than a
     /// wrong `0`, the same rule the stats band uses for missing figures.
     @State private var auditEventCount: Int?
+    @AppStorage("OpenType.settingsCategory") private var category: SettingsCategory = .general
 
     init(model: AppModel) {
         self.model = model
@@ -73,41 +97,25 @@ struct SettingsColumn: View {
                     Spacer(minLength: 0)
                 }
 
-                ScrollView {
-                    if twoColumn {
-                        HStack(alignment: .top, spacing: DS.Space.group) {
-                            VStack(alignment: .leading, spacing: DS.Space.group) {
-                                generalGroup
-                                shortcutGroup
-                                dictationOutputGroup
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-
-                            VStack(alignment: .leading, spacing: DS.Space.group) {
-                                engineGroup
-                                permissionsGroup
-                                dataGroup
-                                aboutGroup
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .padding(.horizontal, pagePadding)
-                        .padding(.bottom, pagePadding)
-                    } else {
-                        VStack(alignment: .leading, spacing: DS.Space.group) {
-                            generalGroup
-                            shortcutGroup
-                            dictationOutputGroup
-                            engineGroup
-                            permissionsGroup
-                            dataGroup
-                            aboutGroup
-                        }
-                        .padding(.horizontal, pagePadding)
-                        .padding(.bottom, pagePadding)
+                if twoColumn {
+                    HStack(alignment: .top, spacing: 24) {
+                        categoryNavigation
+                            .frame(width: 150)
+                        settingsContent
                     }
+                    .padding(.horizontal, pagePadding)
+                } else {
+                    Picker(OpenTypeL10n.text("设置分类", english: "Settings category"), selection: $category) {
+                        ForEach(SettingsCategory.allCases) { item in
+                            Text(item.title).tag(item)
+                        }
+                    }
+                    .labelsHidden()
+                    .pickerStyle(.menu)
+                    .padding(.horizontal, pagePadding)
+                    .padding(.bottom, 16)
+                    settingsContent.padding(.horizontal, pagePadding)
                 }
-                .scrollIndicators(.hidden)
             }
         }
         .background(DS.Colour.canvas)
@@ -121,6 +129,59 @@ struct SettingsColumn: View {
             await model.refreshLLMConfigSummary()
             await model.refreshWhisperModelConfig()
         }
+    }
+
+    private var categoryNavigation: some View {
+        VStack(spacing: 4) {
+            ForEach(SettingsCategory.allCases) { item in
+                Button { category = item } label: {
+                    Label(item.title, systemImage: item.symbol)
+                        .font(DS.Text.body(category == item ? .medium : .regular))
+                        .foregroundStyle(category == item ? DS.Colour.accent : DS.Colour.ink(0.7))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 11)
+                        .background(category == item ? DS.Colour.accent.opacity(0.08) : Color.clear,
+                                    in: RoundedRectangle(cornerRadius: 9, style: .continuous))
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(category == item ? [.isSelected] : [])
+            }
+        }
+    }
+
+    private var settingsContent: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+                switch category {
+                case .general:
+                    generalGroup
+                case .voice:
+                    shortcutGroup
+                    dictationOutputGroup
+                case .intelligence:
+                    engineGroup
+                case .privacy:
+                    permissionsGroup
+                    dataGroup
+                case .about:
+                    HStack(spacing: 14) {
+                        AppBrandIcon(size: 64)
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("OpenType").font(DS.Text.title())
+                            Text(OpenTypeL10n.text("听写 · 问答 · Agent", english: "Dictation · Ask · Agent"))
+                                .font(DS.Text.caption()).foregroundStyle(.secondary)
+                        }
+                    }
+                    aboutGroup
+                }
+            }
+            .frame(maxWidth: 620, alignment: .leading)
+            .frame(maxWidth: .infinity, alignment: .topLeading)
+            .padding(.bottom, 28)
+        }
+        .id(category)
     }
 
     // MARK: 通用
@@ -1204,49 +1265,19 @@ private struct RowDivider: ViewModifier {
 
 // MARK: - Controls
 
-/// The 38×22 switch from the handoff. Custom because `Toggle(.switch)` is a
-/// different size and cannot be restyled, and this control appears seven
-/// times on one screen — the one place a stock control being 2pt off is
-/// visible as a ragged right edge.
+/// Native switches retain macOS keyboard focus and accessibility semantics.
 private struct SettingsSwitch: View {
     @Binding var isOn: Bool
-    @Environment(\.isEnabled) private var isEnabled
 
     var body: some View {
-        Button {
-            isOn.toggle()
-        } label: {
-            Capsule()
-                .fill(isOn ? DS.Colour.accent : DS.Colour.fieldBorder)
-                .frame(width: 38, height: 22)
-                .overlay(alignment: isOn ? .trailing : .leading) {
-                    Circle()
-                        .fill(Color.white)
-                        .frame(width: 18, height: 18)
-                        .modifier(KnobShadow())
-                        .padding(2)
-                }
-                .contentShape(Capsule())
-        }
-        .buttonStyle(.plain)
-        .opacity(isEnabled ? 1 : 0.4)
-        .animation(.easeInOut(duration: 0.15), value: isOn)
-        .accessibilityAddTraits(isOn ? [.isSelected] : [])
-        .accessibilityValue(
-            isOn
-                ? OpenTypeL10n.text("开", english: "On")
-                : OpenTypeL10n.text("关", english: "Off")
-        )
+        Toggle("", isOn: $isOn)
+            .labelsHidden()
+            .toggleStyle(.switch)
+            .controlSize(.small)
     }
 }
 
-/// `DS.Shadow.knob` as a modifier, so it can sit in the switch's chain.
-private struct KnobShadow: ViewModifier {
-    func body(content: Content) -> some View { DS.Shadow.knob(content) }
-}
-
-/// The 26pt segmented control: a recessed track, a lifted white selected
-/// segment.
+/// Native segmented choice, sharing the existing model bindings.
 private struct SegmentedControl<Option: Identifiable & Equatable>: View {
     let options: [Option]
     let selection: Option
@@ -1255,48 +1286,19 @@ private struct SegmentedControl<Option: Identifiable & Equatable>: View {
     let select: (Option) -> Void
 
     var body: some View {
-        HStack(spacing: 2) {
+        Picker("", selection: Binding(
+            get: { selection.id },
+            set: { id in
+                if let option = options.first(where: { $0.id == id }) { select(option) }
+            }
+        )) {
             ForEach(options) { option in
-                let isSelected = option == selection
-                Button {
-                    select(option)
-                } label: {
-                    Text(title(option))
-                        .font(DS.Text.caption())
-                        .fontWeight(isSelected ? .medium : .regular)
-                        .foregroundStyle(isSelected ? Color.primary : DS.Colour.ink(0.55))
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 22)
-                        .background {
-                            if isSelected {
-                                // `0 1px 2px rgba(0,0,0,.1)`, not the `.05`
-                                // lift every other small control takes: this
-                                // chip has to read as raised off its own track
-                                // rather than off the white card.
-                                DS.Shadow.lifted(
-                                    RoundedRectangle(cornerRadius: DS.Radius.tag, style: .continuous)
-                                        .fill(DS.Colour.card)
-                                )
-                            }
-                        }
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .help(help(option))
-                .accessibilityAddTraits(isSelected ? [.isSelected] : [])
+                Text(title(option)).tag(option.id).help(help(option))
             }
         }
-        .padding(2)
-        .frame(height: 26)
-        // The track is a literal warm grey, not an achromatic overlay: no
-        // percentage of black over the white card can be warmer on red/green
-        // than on blue, which is exactly what `#F0F0EE` is. `opacity(0.06)`
-        // used to land on `#F0F0F0` — right on two channels, wrong on the one
-        // that carries the warmth.
-        .background(
-            DS.Colour.controlTrack,
-            in: RoundedRectangle(cornerRadius: DS.Radius.smallControl, style: .continuous)
-        )
+        .labelsHidden()
+        .pickerStyle(.segmented)
+        .controlSize(.regular)
     }
 }
 

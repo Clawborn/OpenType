@@ -48,6 +48,15 @@ struct SidebarShell<List: View, Detail: View>: View {
                         }
                     }
                     .animation(.easeInOut(duration: 0.22), value: showsDetail)
+                } else if model.selectedTab == .settings {
+                    // Settings owns its category navigation; do not squeeze it
+                    // into the conversation list's 334pt slot beside an empty
+                    // placeholder. Provider pages push into this same area.
+                    if showsDetail {
+                        detail().frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else {
+                        list().frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
                 } else if model.selectedTab.isFullWidthPage {
                     // 听写 and 记忆 are single pages with their own internal
                     // splits. Giving them the 334pt list slot capped them below
@@ -124,20 +133,7 @@ private struct SidebarColumn: View {
 
     private var brand: some View {
         HStack(spacing: 8) {
-            RoundedRectangle(cornerRadius: 7, style: .continuous)
-                .fill(
-                    LinearGradient(
-                        colors: [DS.Colour.accent, DS.Colour.agent],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .frame(width: 24, height: 24)
-                .overlay {
-                    Image(systemName: "waveform")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundStyle(.white)
-                }
+            AppBrandIcon(size: 30)
             if !collapsed {
                 Text("OpenType")
                     .font(DS.Text.body(.semibold))
@@ -155,7 +151,7 @@ private struct SidebarColumn: View {
             let count = model.sessionConversations.count
             return count > 0 ? "\(count)" : nil
         case .dictation:
-            let count = model.historyEntries.count
+            let count = DictationHistory.entries(in: model.historyEntries).count
             return count > 0 ? "\(count)" : nil
         case .memory, .settings:
             return nil
@@ -178,7 +174,7 @@ private struct SidebarItem: View {
             HStack(spacing: 9) {
                 Image(systemName: tab.symbol)
                     .font(.system(size: collapsed ? 17 : 16))
-                    .foregroundStyle(selected ? .white : .secondary)
+                    .foregroundStyle(selected ? DS.Colour.accent : DS.Colour.ink(0.6))
                     .frame(width: collapsed ? 34 : nil, height: 30)
                     .overlay(alignment: .topTrailing) {
                         if collapsed, needsAttention {
@@ -191,7 +187,7 @@ private struct SidebarItem: View {
                 if !collapsed {
                     Text(tab.title)
                         .font(DS.Text.body(selected ? .medium : .regular))
-                        .foregroundStyle(selected ? .white : .primary)
+                        .foregroundStyle(Color.primary)
                     Spacer(minLength: 0)
                     if needsAttention {
                         Circle()
@@ -202,19 +198,19 @@ private struct SidebarItem: View {
                             .font(DS.Text.mono())
                             .foregroundStyle(
                                 selected
-                                    ? AnyShapeStyle(Color.white.opacity(0.85))
+                                    ? AnyShapeStyle(DS.Colour.accent)
                                     : AnyShapeStyle(HierarchicalShapeStyle.tertiary)
                             )
                     }
                 }
             }
             .padding(.horizontal, collapsed ? 0 : 9)
-            .frame(height: 30)
+            .frame(height: 36)
             .frame(maxWidth: .infinity, alignment: collapsed ? .center : .leading)
             .background {
                 if selected {
                     RoundedRectangle(cornerRadius: collapsed ? 7 : DS.Radius.control, style: .continuous)
-                        .fill(DS.Colour.accent)
+                        .fill(DS.Colour.accent.opacity(0.09))
                 }
             }
             .contentShape(Rectangle())

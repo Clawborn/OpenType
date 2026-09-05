@@ -140,11 +140,11 @@ enum DS {
         /// to `agent`, which would make the app's own icon say "Agent".
         static let brandGradientEnd = Color(red: 0.341, green: 0.318, blue: 0.980)
 
-        /// `#F5F5F3` — the page.
-        static let canvas = Color(red: 0.961, green: 0.961, blue: 0.953)
+        /// Neutral surfaces, owner-approved native direction (2026-09-05).
+        static let canvas = Color(red: 0.969, green: 0.969, blue: 0.976)
         /// Slightly darker than `canvas`, which is what separates the sidebar
         /// from the list without a border between them.
-        static let sidebar = Color(red: 0.918, green: 0.918, blue: 0.906)
+        static let sidebar = Color(red: 0.945, green: 0.945, blue: 0.953)
         /// Literal white rather than `.textBackgroundColor`. The app is pinned
         /// to the light appearance (`OpenTypeApp`), so the two agree today —
         /// but a semantic colour here would silently reintroduce the dark

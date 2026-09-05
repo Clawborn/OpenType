@@ -65,20 +65,7 @@ struct MenuBarPopoverView: View {
 
     private var header: some View {
         HStack(spacing: 9) {
-            RoundedRectangle(cornerRadius: DS.Radius.control, style: .continuous)
-                .fill(
-                    LinearGradient(
-                        colors: [DS.Colour.accent, DS.Colour.brandGradientEnd],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .frame(width: 20, height: 20)
-                .overlay {
-                    Image(systemName: "waveform")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(.white)
-                }
+            AppBrandIcon(size: 26)
 
             Text("OpenType")
                 .font(DS.Text.body(.semibold))
@@ -131,6 +118,7 @@ struct MenuBarPopoverView: View {
         Button {
             onOpenMainWindow()
             model.selectedTab = .settings
+            model.settingsRoute = .languageModel
         } label: {
             HStack(spacing: 7) {
                 Image(systemName: "exclamationmark.triangle")
