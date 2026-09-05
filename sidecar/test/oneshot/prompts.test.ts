@@ -1,6 +1,22 @@
 import { describe, expect, test } from "bun:test";
 import { AGENT_SYSTEM_PROMPT, ASK_SYSTEM_PROMPT } from "../../src/oneshot/prompts";
 
+describe("conversational response style", () => {
+  for (const [name, prompt] of [["ask", ASK_SYSTEM_PROMPT], ["agent", AGENT_SYSTEM_PROMPT]]) {
+    test(`${name} follows the current user's language and keeps simple exchanges brief`, () => {
+      expect(prompt).toContain("Reply in the language of the user's current message");
+      expect(prompt).toContain("unless the user explicitly requests another language");
+      expect(prompt).toContain("For a greeting or a simple acknowledgement, use one short sentence");
+      expect(prompt).toContain("Do not advertise your capabilities");
+      expect(prompt).toContain("UNTRUSTED");
+    });
+  }
+  test("agent distinguishes an actual completed action from a draft", () => {
+    expect(AGENT_SYSTEM_PROMPT).toContain("Never claim an action succeeded without a confirming tool result");
+    expect(AGENT_SYSTEM_PROMPT).not.toContain("this is a draft for the user to review, not an action taken");
+  });
+});
+
 describe("AGENT_SYSTEM_PROMPT", () => {
   test("tells the model when to call remember_fact, including the Chinese 记住 trigger", () => {
     expect(AGENT_SYSTEM_PROMPT).toContain("remember_fact");

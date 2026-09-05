@@ -21,6 +21,27 @@
 
 ## 1. 三条模型调用路径
 
+### 2026-09-05 回答风格补充
+
+`sidecar/src/oneshot/prompts.ts` 的 ASK / AGENT 系统提示现在都插入固定的 `RESPONSE_STYLE` 段。
+模型逐字收到下面这段文字（两种模式一致）：
+
+```text
+Reply in the language of the user's current message, unless the user explicitly requests another language. For mixed-language input, follow the language of the actual question or task; preserve names and technical terms. Do not let the language of system instructions, older messages, or retrieved context override this choice.
+
+Use plain, natural vocabulary. For a greeting or a simple acknowledgement, use one short sentence and no tools. Do not advertise your capabilities, introduce yourself, offer an unsolicited menu of tasks, or add decorative emoji. For substantive requests, lead with the answer or outcome. Match detail to the user's request: be brief by default, but keep necessary reasoning, qualifications and useful detail when asked. Show technical steps only when they help the user verify or act on the result.
+```
+
+Agent 同时移除「所有结果都是草稿、不是实际动作」这一与工具能力矛盾的措辞，改为：
+
+```text
+Distinguish generated drafts from actions actually performed. Never claim an action succeeded without a confirming tool result. If it failed, say what remains undone and give the next useful step. For a file deliverable, identify the file and its path; for a writing request, return the usable draft without an unnecessary preamble.
+```
+
+成本：每次请求增加约 170–210 tokens 的固定风格文字（粗估，随模型 tokenizer 不同），Agent另有结果表述段变更。
+不增加历史或个人资料注入。系统前缀改变后首次请求的旧缓存不能复用；之后固定前缀仍可复用。
+听写仍不调用这些提示词；原有工具权限与 UNTRUSTED 数据防御不变。
+
 sidecar 里一共只有三处向模型发请求。
 
 | 路径 | 系统提示 | 历史 | 工具 | 迭代上限 |

@@ -636,7 +636,7 @@ struct SessionThreadColumn: View {
             HStack(alignment: .bottom, spacing: 10) {
                 ZStack(alignment: .topLeading) {
                     if draft.isEmpty {
-                        Text(OpenTypeL10n.text("接着说，或按住 ⌥ 口述…", english: "Keep talking, or hold ⌥ to dictate…"))
+                        Text(ConversationRecordingTarget(conversation: focused).placeholder)
                             .font(DS.Text.body())
                             .foregroundStyle(DS.Colour.ink(0.35))
                             .allowsHitTesting(false)
@@ -650,8 +650,14 @@ struct SessionThreadColumn: View {
                 .padding(.bottom, 6)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                SessionComposerButton(symbol: "mic.fill", filled: false, help: OpenTypeL10n.text("说话", english: "Speak")) {
-                    model.hotKeyToggled()
+                SessionComposerButton(
+                    symbol: model.isRecording(in: focused) ? "stop.fill" : "mic.fill",
+                    filled: model.isRecording(in: focused),
+                    help: model.isRecording(in: focused)
+                        ? OpenTypeL10n.text("结束录音", english: "Finish recording")
+                        : OpenTypeL10n.text("用语音继续本次会话", english: "Continue this conversation by voice")
+                ) {
+                    model.toggleConversationRecording(in: focused)
                 }
                 SessionComposerButton(symbol: "arrow.up", filled: true, help: OpenTypeL10n.text("发送", english: "Send")) {
                     send(focused)
@@ -1247,13 +1253,13 @@ private struct SessionTurn: View {
                     .font(DS.Text.body())
                     // 1.6 line height at 13pt.
                     .lineSpacing(5)
-                    .foregroundStyle(Color.white)
+                    .foregroundStyle(DS.Colour.inkBase)
                     .textSelection(.enabled)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.horizontal, 14)
                     .padding(.vertical, 10)
-                    .frame(maxWidth: maxBubbleWidth, alignment: .leading)
-                    .background(DS.Colour.accent, in: SessionBubbleShape())
+                    .background(DS.Colour.control, in: SessionBubbleShape())
+                    .frame(maxWidth: maxBubbleWidth, alignment: .trailing)
             }
         } else {
             // No bubble, no width cap: a long answer is a document.

@@ -955,10 +955,15 @@ final class OverlayController {
         switch behavior {
         case .hideImmediately:
             hide()
-        case .scheduleHide(let seconds),
-             .scheduleHideWithCorrectionHint(let seconds):
+        case .scheduleHide(let seconds):
             legacyOnScreen = (state, mode)
             dismiss(after: seconds)
+        case .scheduleHideWithCorrectionHint(let seconds):
+            legacyOnScreen = (state, mode)
+            dismiss(after: DeliveryFeedback.visibleSeconds(
+                correctionSeconds: seconds,
+                hasActions: presentation.learningNote != nil || !presentation.aliasReplacements.isEmpty
+            ))
         case .keepVisible:
             legacyOnScreen = (state, mode)
         }
@@ -972,7 +977,8 @@ final class OverlayController {
             return VoiceSurfacePanelMetrics.pill
         case .success, .copied:
             return VoiceSurfacePanelMetrics.delivery(
-                hasText: !presentation.deliveryBody.isEmpty,
+                hasText: !presentation.deliveryBody.isEmpty &&
+                    (presentation.learningNote != nil || !presentation.aliasReplacements.isEmpty),
                 hasHint: presentation.correctionHint != nil,
                 hasNote: presentation.learningNote != nil,
                 replacementCount: presentation.aliasReplacements.count,
@@ -1700,7 +1706,8 @@ private struct OverlayView: View {
                 }
             }
 
-            if !presentation.deliveryBody.isEmpty {
+            if !presentation.deliveryBody.isEmpty,
+               presentation.learningNote != nil || !presentation.aliasReplacements.isEmpty {
                 Text(presentation.deliveryBody)
                     .font(DS.Text.size(12.5))
                     // 1.55 line height at 12.5pt.

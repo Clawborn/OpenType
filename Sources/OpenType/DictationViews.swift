@@ -9,9 +9,8 @@ import SwiftUI
 /// Now one card holds a whole day and the rows inside it are separated by a
 /// hairline: the card boundary means "a day", not "a row", which is the only
 /// grouping a user actually scans by. And the week's own numbers moved from a
-/// small panel wedged above the list to a band that is the page's header — they
-/// are a summary *of* this list, so they belong at the top of it rather than
-/// somewhere you have to remember to look.
+/// separate all-mode statistics area, now collapsed by default so finding
+/// a recent dictation is the page's primary task (2026-09-05).
 ///
 /// Everything here is derived. `AppModel.historyEntries` (Task 7, design
 /// §3.7: the sidecar's `episodic_events` table, not the local
@@ -31,6 +30,7 @@ struct DictationColumn: View {
 
     @State private var query = ""
     @State private var source: String?
+    @State private var showsUsage = false
     /// Pinned rather than read at every render so the bar strip's labels and
     /// the day headings do not shift underneath a user who leaves the window
     /// open across midnight without the numbers beside them moving too.
@@ -56,14 +56,21 @@ struct DictationColumn: View {
 
                 ScrollView {
                     VStack(alignment: .leading, spacing: DS.Space.group) {
-                        UsageStatsBand(
-                            summary: model.usageSummary,
-                            dictionary: DictionaryStats.counts(for: model.memoryTerms),
-                            narrow: narrow,
-                            now: now
-                        )
+                        DisclosureGroup(isExpanded: $showsUsage) {
+                            UsageStatsBand(
+                                summary: model.usageSummary,
+                                dictionary: DictionaryStats.counts(for: model.memoryTerms),
+                                narrow: narrow,
+                                now: now
+                            )
+                            .padding(.top, 8)
+                        } label: {
+                            Text(OpenTypeL10n.text("使用情况 · 所有模式", english: "Usage · All modes"))
+                                .font(DS.Text.caption())
+                                .foregroundStyle(.secondary)
+                        }
 
-                        if model.historyEntries.isEmpty {
+                        if dictationEntries.isEmpty {
                             // `entries.isEmpty` alone cannot tell "genuinely
                             // no history" from "the sidecar didn't answer" —
                             // that is exactly what `isConfirmedEmpty` is for
@@ -71,7 +78,7 @@ struct DictationColumn: View {
                             // never render as "no history yet": that reads as
                             // data loss to a user whose sidecar merely hasn't
                             // answered a refresh yet.
-                            if model.historyLoadState.isConfirmedEmpty {
+                            if DictationHistory.isConfirmedEmpty(model.historyLoadState) {
                                 emptyState(
                                     symbol: "clock.arrow.circlepath",
                                     title: OpenTypeL10n.text(
@@ -315,11 +322,15 @@ struct DictationColumn: View {
 
     // MARK: Data
 
+    private var dictationEntries: [HistoryEntry] {
+        DictationHistory.entries(in: model.historyEntries)
+    }
+
     /// Every source app that has produced an entry, so the filter offers only
     /// choices that can return something.
     private var sources: [String] {
         var seen = Set<String>()
-        return model.historyEntries
+        return dictationEntries
             .map(\.applicationName)
             .filter { !$0.isEmpty && seen.insert($0).inserted }
             .sorted()
@@ -333,8 +344,8 @@ struct DictationColumn: View {
     /// "export" means "export what I am looking at".
     private var filtered: [HistoryEntry] {
         let bySource = source.map { source in
-            model.historyEntries.filter { $0.applicationName == source }
-        } ?? model.historyEntries
+            dictationEntries.filter { $0.applicationName == source }
+        } ?? dictationEntries
         return HistorySearch.filter(bySource, query: query)
     }
 
@@ -548,7 +559,8 @@ private struct DictationRowAction: View {
                 // size and the wrong weight for a glyph, and it was reading as a
                 // heading-sized mark next to 13pt body.
                 .font(DS.Text.size(16))
-                .foregroundStyle(rowHovering ? DS.Colour.ink(0.55) : DS.Colour.ink(0.32))
+                .foregroundStyle(rowHovering ? DS.Colour.accent : DS.Colour.ink(0.6))
+                .frame(width: 28, height: 28)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)

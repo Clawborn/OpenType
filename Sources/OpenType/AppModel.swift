@@ -54,6 +54,7 @@ final class AppModel: ObservableObject {
     @Published private(set) var microphonePermission: PermissionStatus = .notDetermined
     @Published private(set) var speechRecognitionPermission: PermissionStatus = .notDetermined
     @Published private(set) var isPracticeSession = false
+    private var recordingConversation: ConversationRecordingTarget?
     /// Whether the recording in progress was started by a UI tap (the result
     /// card's mic button — `startVoiceSurfaceFollowUpRecording()`) rather than
     /// the physical hotkey. `isHotKeyHeld` cannot answer this question: it is
@@ -976,7 +977,8 @@ final class AppModel: ObservableObject {
         context: CapturedContext,
         mode: InputMode,
         practice: Bool,
-        startedByClick: Bool = false
+        startedByClick: Bool = false,
+        conversation: ConversationRecordingTarget? = nil
     ) {
         // The single choke point for "a NEW dictation began" — which is what
         // closes a correction window (P0-3). Deliberately not in
@@ -986,6 +988,7 @@ final class AppModel: ObservableObject {
         isStartingRecording = true
         capturedContext = context
         activeMode = mode
+        recordingConversation = conversation
         isPracticeSession = practice
         isClickStartedRecording = startedByClick
         processingTask?.cancel()
@@ -1086,6 +1089,7 @@ final class AppModel: ObservableObject {
     }
 
     func cancel() {
+        recordingConversation = nil
         processingTask?.cancel()
         processingTask = nil
         isHotKeyHeld = false
@@ -4013,6 +4017,7 @@ final class AppModel: ObservableObject {
     ///   the statistics panel can measure the span the user actually waits
     ///   through — see `UsageStats` and `ImmutableAuditEvent.recordingEndedAt`.
     private func process(audioURL: URL, recordingEndedAt: Date? = nil) async {
+        let conversation = recordingConversation
         let startingMode = activeMode ?? configuration.selectedMode
         let practice = isPracticeSession
         let auditRequestID = UUID()
@@ -4059,6 +4064,7 @@ final class AppModel: ObservableObject {
         defer {
             try? FileManager.default.removeItem(at: audioURL)
             activeMode = nil
+            recordingConversation = nil
             isPracticeSession = false
             isClickStartedRecording = false
         }
@@ -4070,7 +4076,7 @@ final class AppModel: ObservableObject {
             try Task.checkCancellation()
             auditRawTranscript = rawTranscript
 
-            let routed = VoiceModeRouter.route(
+            let routed = conversation?.route(rawTranscript) ?? VoiceModeRouter.route(
                 rawTranscript,
                 currentMode: startingMode
             )
@@ -4175,7 +4181,7 @@ final class AppModel: ObservableObject {
                 // Read the thread off the CURRENT panel before replacing it:
                 // the card still on screen is what the user is following up
                 // on, and overwriting the state first would lose it.
-                let askThread = VoiceFollowUp.conversationId(
+                let askThread = conversation?.conversationID ?? VoiceFollowUp.conversationId(
                     surface: askPanelState?.conversationId,
                     focusedTab: focusedAskConversationId
                 )
@@ -4233,7 +4239,7 @@ final class AppModel: ObservableObject {
                     context: capturedContext,
                     practice: practice,
                     requestID: auditRequestID,
-                    conversationId: VoiceFollowUp.conversationId(
+                    conversationId: conversation?.conversationID ?? VoiceFollowUp.conversationId(
                         surface: agentPanelState?.conversationId,
                         focusedTab: focusedAgentConversationId
                     )
@@ -4475,6 +4481,28 @@ final class AppModel: ObservableObject {
     /// `contextBridge.capture()`: a typed turn originates in OpenType's own
     /// window, so there is no other app's selection to read and nothing that
     /// should be treated as one.
+    /// A conversation-local microphone never reads the global mode, the
+    /// frontmost app's selection, or an unrelated review/overlay card.
+    func toggleConversationRecording(in conversation: FocusedConversation) {
+        let target = ConversationRecordingTarget(conversation: conversation)
+        if recordingConversation == target, isClickStartedRecording, state == .listening {
+            isHotKeyHeld = false
+            finishRecording()
+            return
+        }
+        guard state != .listening, !isBusy, !isStartingRecording else { return }
+        isHotKeyHeld = true
+        beginRecording(
+            context: CapturedContext(selectedText: nil, applicationName: "OpenType",
+                                     bundleIdentifier: "ai.rain.opentype"),
+            mode: target.mode, practice: false, startedByClick: true, conversation: target
+        )
+    }
+
+    func isRecording(in conversation: FocusedConversation) -> Bool {
+        recordingConversation?.conversation == conversation && isClickStartedRecording && state == .listening
+    }
+
     func submitTypedTurn(_ text: String, in conversation: FocusedConversation) {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty, !isBusy else { return }
@@ -5247,6 +5275,7 @@ final class AppModel: ObservableObject {
     }
 
     private func fail(_ error: Error) {
+        recordingConversation = nil
         let message = ErrorMessagePresenter.message(for: error)
         let failedMode = activeMode ?? configuration.selectedMode
         isHotKeyHeld = false
